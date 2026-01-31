@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dry Spell - Water Tank Sizing Tool</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/wizard.css">
+    <link rel="stylesheet" href="css/inputs.css">
+    <link rel="stylesheet" href="css/results.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <h1>Dry Spell</h1>
+            <p class="tagline">Size your water tank with confidence</p>
+        </header>
+
+        <main class="wizard-container">
+            <!-- Step 1: Upload -->
+            <section class="wizard-step" data-step="upload">
+                <div class="step-header">
+                    <span class="step-number">1</span>
+                    <h2>Upload Rainfall Data</h2>
+                </div>
+                <div class="step-content">
+                    <p class="step-description">Upload a daily rainfall CSV file from the Bureau of Meteorology. Your data is processed locally and never leaves your device.</p>
+
+                    <div class="upload-zone" id="upload-zone">
+                        <div class="upload-icon">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="17 8 12 3 7 8"/>
+                                <line x1="12" y1="3" x2="12" y2="15"/>
+                            </svg>
+                        </div>
+                        <p class="upload-text">Drag and drop your BoM CSV file here</p>
+                        <p class="upload-or">or</p>
+                        <label class="upload-button">
+                            <span>Choose File</span>
+                            <input type="file" id="file-input" accept=".csv" hidden>
+                        </label>
+                    </div>
+
+                    <div class="upload-status" id="upload-status" hidden>
+                        <div class="status-loading" id="status-loading" hidden>
+                            <div class="spinner"></div>
+                            <span>Processing file...</span>
+                        </div>
+                        <div class="status-success" id="status-success" hidden>
+                            <div class="status-icon success-icon">&#10003;</div>
+                            <div class="status-details">
+                                <p class="status-title">Data loaded successfully</p>
+                                <p class="status-info" id="data-summary"></p>
+                            </div>
+                        </div>
+                        <div class="status-error" id="status-error" hidden>
+                            <div class="status-icon error-icon">&#10007;</div>
+                            <div class="status-details">
+                                <p class="status-title">Error loading file</p>
+                                <p class="status-info" id="error-message"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a href="http://www.bom.gov.au/climate/data/" target="_blank" class="help-link">How do I get rainfall data from BoM?</a>
+                </div>
+                <div class="step-actions">
+                    <button class="btn btn-primary" id="btn-to-mode" disabled>Continue</button>
+                </div>
+            </section>
+
+            <!-- Step 2: Mode Selection -->
+            <section class="wizard-step" data-step="mode" hidden>
+                <div class="step-header">
+                    <span class="step-number">2</span>
+                    <h2>Choose Your Goal</h2>
+                </div>
+                <div class="step-content">
+                    <div class="mode-cards">
+                        <button class="mode-card" data-mode="security">
+                            <div class="mode-icon">
+                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                </svg>
+                            </div>
+                            <h3>Water Security</h3>
+                            <p>Size a tank for complete water independence. Calculate what you need to never run out, even through extended dry periods.</p>
+                            <span class="mode-tag">For off-grid or backup supply</span>
+                        </button>
+
+                        <button class="mode-card" data-mode="opportunistic">
+                            <div class="mode-icon">
+                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" y1="1" x2="12" y2="23"/>
+                                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                                </svg>
+                            </div>
+                            <h3>Save Money</h3>
+                            <p>Find the sweet spot between tank size and savings. See how much you can offset your water bills with different tank sizes.</p>
+                            <span class="mode-tag">For mains-connected homes</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="step-actions">
+                    <button class="btn btn-secondary" id="btn-back-to-upload">Back</button>
+                    <button class="btn btn-primary" id="btn-to-params" disabled>Continue</button>
+                </div>
+            </section>
+
+            <!-- Step 3: Parameters -->
+            <section class="wizard-step" data-step="params" hidden>
+                <div class="step-header">
+                    <span class="step-number">3</span>
+                    <h2>Enter Your Details</h2>
+                </div>
+                <div class="step-content">
+                    <div class="params-grid">
+                        <!-- Common parameters -->
+                        <div class="param-group">
+                            <label for="roof-area">Roof Catchment Area</label>
+                            <div class="input-with-unit">
+                                <input type="number" id="roof-area" value="180" min="10" max="1000" step="10">
+                                <span class="unit">m&sup2;</span>
+                            </div>
+                            <p class="param-hint">Typical Australian house: 150-250 m&sup2;</p>
+                        </div>
+
+                        <div class="param-group">
+                            <label for="daily-usage">Daily Water Usage</label>
+                            <div class="input-with-unit">
+                                <input type="number" id="daily-usage" value="500" min="50" max="2000" step="50">
+                                <span class="unit">litres</span>
+                            </div>
+                            <div class="usage-presets">
+                                <button class="preset-btn" data-usage="150">Outdoor only</button>
+                                <button class="preset-btn" data-usage="350">Small (1-2)</button>
+                                <button class="preset-btn active" data-usage="500">Average (3-4)</button>
+                                <button class="preset-btn" data-usage="800">Large</button>
+                            </div>
+                        </div>
+
+                        <!-- Security mode: confidence slider -->
+                        <div class="param-group security-only" id="confidence-group" hidden>
+                            <label for="confidence">Security Level</label>
+                            <div class="slider-container">
+                                <input type="range" id="confidence" min="90" max="99.9" step="0.1" value="95">
+                                <div class="slider-labels">
+                                    <span>90%</span>
+                                    <span>95%</span>
+                                    <span>99%</span>
+                                    <span>99.9%</span>
+                                </div>
+                            </div>
+                            <p class="param-value">Target: <strong id="confidence-value">95%</strong> of days with water available</p>
+                        </div>
+
+                        <!-- Opportunistic mode: water rate -->
+                        <div class="param-group opportunistic-only" id="water-rate-group" hidden>
+                            <label for="water-rate">Water Rate</label>
+                            <div class="input-with-unit">
+                                <span class="unit-prefix">$</span>
+                                <input type="number" id="water-rate" value="3.50" min="0.50" max="20" step="0.10">
+                                <span class="unit">per kL</span>
+                            </div>
+                            <p class="param-hint">Check your water bill for your rate. Australian average: $2.50-$4.50/kL</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="step-actions">
+                    <button class="btn btn-secondary" id="btn-back-to-mode">Back</button>
+                    <button class="btn btn-primary" id="btn-calculate">Calculate</button>
+                </div>
+            </section>
+
+            <!-- Step 4: Results -->
+            <section class="wizard-step" data-step="results" hidden>
+                <div class="step-header">
+                    <span class="step-number">4</span>
+                    <h2>Your Results</h2>
+                </div>
+                <div class="step-content">
+                    <!-- Security mode results -->
+                    <div id="security-results" hidden>
+                        <div class="result-hero">
+                            <p class="result-label">Recommended Tank Size</p>
+                            <p class="result-value" id="recommended-tank"></p>
+                            <p class="result-subtitle" id="confidence-statement"></p>
+                        </div>
+
+                        <div class="results-grid">
+                            <div class="result-card">
+                                <h4>Reliability</h4>
+                                <p class="card-stat" id="reliability-stat"></p>
+                                <p class="card-detail" id="reliability-detail"></p>
+                            </div>
+
+                            <div class="result-card">
+                                <h4>Water Stress</h4>
+                                <p class="card-stat" id="stress-stat"></p>
+                                <p class="card-detail" id="stress-detail"></p>
+                            </div>
+                        </div>
+
+                        <div class="result-section">
+                            <h4>What if you chose a smaller tank?</h4>
+                            <table class="results-table" id="failure-table">
+                                <thead>
+                                    <tr>
+                                        <th>Tank Size</th>
+                                        <th>Would Have Run Empty</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="failure-table-body">
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="result-section">
+                            <h4>Worst Dry Spell in Data</h4>
+                            <div class="dry-spell-card" id="dry-spell-card">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Opportunistic mode results -->
+                    <div id="opportunistic-results" hidden>
+                        <div class="result-hero opportunistic-hero">
+                            <p class="result-label">Best Value Tank Size</p>
+                            <p class="result-value" id="best-value-tank"></p>
+                            <p class="result-subtitle" id="best-value-subtitle"></p>
+                        </div>
+
+                        <div class="results-grid">
+                            <div class="result-card">
+                                <h4>Your Roof Potential</h4>
+                                <p class="card-stat" id="roof-potential"></p>
+                                <p class="card-detail" id="roof-potential-detail"></p>
+                            </div>
+
+                            <div class="result-card">
+                                <h4>Your Water Cost</h4>
+                                <p class="card-stat" id="water-cost"></p>
+                                <p class="card-detail" id="water-cost-detail"></p>
+                            </div>
+                        </div>
+
+                        <div class="result-section">
+                            <h4>Tank Size Comparison</h4>
+                            <table class="results-table comparison-table" id="comparison-table">
+                                <thead>
+                                    <tr>
+                                        <th>Size</th>
+                                        <th>Mains Offset</th>
+                                        <th>Annual Savings</th>
+                                        <th>Efficiency</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="comparison-table-body">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="step-actions">
+                    <button class="btn btn-secondary" id="btn-back-to-params">Back</button>
+                    <button class="btn btn-primary" id="btn-start-over">Start Over</button>
+                </div>
+            </section>
+        </main>
+
+        <footer class="app-footer">
+            <p>All calculations performed in your browser. Your data never leaves your device.</p>
+        </footer>
+    </div>
+
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>

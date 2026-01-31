@@ -1,0 +1,248 @@
+/* Results Hero */
+.result-hero {
+    text-align: center;
+    padding: 32px;
+    background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-bg) 100%);
+    border-radius: var(--border-radius-lg);
+    margin-bottom: 24px;
+}
+
+.result-hero.opportunistic-hero {
+    background: linear-gradient(135deg, var(--color-success-light) 0%, var(--color-bg) 100%);
+}
+
+.result-label {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-text-muted);
+    margin-bottom: 8px;
+}
+
+.result-value {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: 8px;
+}
+
+.opportunistic-hero .result-value {
+    color: var(--color-success);
+}
+
+.result-subtitle {
+    color: var(--color-text-muted);
+    font-size: 1rem;
+}
+
+/* Results Grid */
+.results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--card-gap);
+    margin-bottom: 24px;
+}
+
+/* Result Card */
+.result-card {
+    background: var(--color-bg);
+    border-radius: var(--border-radius);
+    padding: 20px;
+}
+
+.result-card h4 {
+    margin-bottom: 12px;
+    font-size: 0.85rem;
+}
+
+.card-stat {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: 4px;
+}
+
+.card-detail {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+}
+
+/* Result Section */
+.result-section {
+    margin-bottom: 24px;
+}
+
+.result-section:last-child {
+    margin-bottom: 0;
+}
+
+.result-section h4 {
+    margin-bottom: 16px;
+    font-size: 1rem;
+    text-transform: none;
+    letter-spacing: normal;
+    color: var(--color-text);
+}
+
+/* Results Table */
+.results-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+.results-table th,
+.results-table td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.results-table th {
+    background: var(--color-bg);
+    font-weight: 600;
+    color: var(--color-text-muted);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.results-table tbody tr:hover {
+    background: var(--color-bg);
+}
+
+.results-table .tank-size {
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.results-table .failure-desc {
+    color: var(--color-text-muted);
+}
+
+.results-table .no-failures {
+    color: var(--color-success);
+    font-weight: 500;
+}
+
+/* Comparison Table (Opportunistic) */
+.comparison-table .best-value {
+    background: var(--color-success-light);
+}
+
+.comparison-table .best-value td {
+    color: var(--color-success);
+    font-weight: 500;
+}
+
+.comparison-table .savings {
+    font-weight: 600;
+    color: var(--color-success);
+}
+
+/* Efficiency Bar */
+.efficiency-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.efficiency-track {
+    flex: 1;
+    height: 8px;
+    background: var(--color-border);
+    border-radius: 4px;
+    overflow: hidden;
+    max-width: 100px;
+}
+
+.efficiency-fill {
+    height: 100%;
+    background: var(--color-primary);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.efficiency-value {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    min-width: 40px;
+}
+
+/* Dry Spell Card */
+.dry-spell-card {
+    background: var(--color-warning-light);
+    border-radius: var(--border-radius);
+    padding: 20px;
+}
+
+.dry-spell-dates {
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: 8px;
+}
+
+.dry-spell-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+}
+
+.dry-spell-stat {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.dry-spell-stat strong {
+    color: var(--color-warning);
+}
+
+/* Best Value Badge */
+.best-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    background: var(--color-success);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-radius: 9999px;
+    margin-left: 8px;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .result-hero {
+        padding: 24px 16px;
+    }
+
+    .result-value {
+        font-size: 2.25rem;
+    }
+
+    .results-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .results-table {
+        font-size: 0.85rem;
+    }
+
+    .results-table th,
+    .results-table td {
+        padding: 10px 12px;
+    }
+
+    /* Make comparison table scrollable on mobile */
+    .result-section:has(.comparison-table) {
+        overflow-x: auto;
+    }
+
+    .comparison-table {
+        min-width: 500px;
+    }
+}
