@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="css/wizard.css">
     <link rel="stylesheet" href="css/inputs.css">
     <link rel="stylesheet" href="css/results.css">
+    <link rel="stylesheet" href="css/charts.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
 </head>
 <body>
     <div class="app-container">
@@ -221,6 +224,48 @@
                             <div class="dry-spell-card" id="dry-spell-card">
                             </div>
                         </div>
+
+                        <!-- Tank Level Chart -->
+                        <div class="chart-section" id="security-tank-level-section">
+                            <div class="chart-header" data-chart="security-tank-level">
+                                <h4>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <line x1="12" y1="20" x2="12" y2="10"></line>
+                                        <line x1="18" y1="20" x2="18" y2="4"></line>
+                                        <line x1="6" y1="20" x2="6" y2="16"></line>
+                                    </svg>
+                                    Tank Level Over Time
+                                </h4>
+                                <span class="chart-toggle">▼</span>
+                            </div>
+                            <div class="chart-content collapsed">
+                                <p class="chart-description">See how your tank level would have fluctuated over the historical period.</p>
+                                <div class="chart-container tank-level-chart">
+                                    <canvas id="security-tank-level-chart"></canvas>
+                                </div>
+                                <div class="chart-insights" id="security-tank-insights"></div>
+                            </div>
+                        </div>
+
+                        <!-- Dry Spell Histogram -->
+                        <div class="chart-section" id="security-dry-spell-section">
+                            <div class="chart-header" data-chart="security-dry-spell">
+                                <h4>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                                    </svg>
+                                    Dry Spell Analysis
+                                </h4>
+                                <span class="chart-toggle">▼</span>
+                            </div>
+                            <div class="chart-content collapsed">
+                                <p class="chart-description">Distribution of consecutive dry periods in your rainfall data.</p>
+                                <div class="chart-container dry-spell-chart">
+                                    <canvas id="security-dry-spell-chart"></canvas>
+                                </div>
+                                <div id="security-dry-spell-stats"></div>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Opportunistic mode results -->
@@ -259,6 +304,54 @@
                                 <tbody id="comparison-table-body">
                                 </tbody>
                             </table>
+                        </div>
+
+                        <!-- Tank Level Chart -->
+                        <div class="chart-section" id="opportunistic-tank-level-section">
+                            <div class="chart-header" data-chart="opportunistic-tank-level">
+                                <h4>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <line x1="12" y1="20" x2="12" y2="10"></line>
+                                        <line x1="18" y1="20" x2="18" y2="4"></line>
+                                        <line x1="6" y1="20" x2="6" y2="16"></line>
+                                    </svg>
+                                    Tank Level Over Time
+                                </h4>
+                                <span class="chart-toggle">▼</span>
+                            </div>
+                            <div class="chart-content collapsed">
+                                <p class="chart-description">See how the recommended tank level would have fluctuated over the historical period.</p>
+                                <div class="chart-container tank-level-chart">
+                                    <canvas id="opportunistic-tank-level-chart"></canvas>
+                                </div>
+                                <div class="chart-insights" id="opportunistic-tank-insights"></div>
+                            </div>
+                        </div>
+
+                        <!-- Monthly Rainfall Pattern -->
+                        <div class="chart-section" id="opportunistic-rainfall-section">
+                            <div class="chart-header" data-chart="opportunistic-rainfall">
+                                <h4>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <line x1="8" y1="19" x2="8" y2="21"></line>
+                                        <line x1="8" y1="13" x2="8" y2="15"></line>
+                                        <line x1="16" y1="19" x2="16" y2="21"></line>
+                                        <line x1="16" y1="13" x2="16" y2="15"></line>
+                                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                                        <line x1="12" y1="15" x2="12" y2="17"></line>
+                                        <path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25"></path>
+                                    </svg>
+                                    Monthly Rainfall Patterns
+                                </h4>
+                                <span class="chart-toggle">▼</span>
+                            </div>
+                            <div class="chart-content collapsed">
+                                <p class="chart-description">Understand the seasonal rainfall patterns at your location.</p>
+                                <div class="chart-container monthly-rainfall-chart">
+                                    <canvas id="opportunistic-rainfall-chart"></canvas>
+                                </div>
+                                <div class="chart-insights" id="opportunistic-rainfall-insights"></div>
+                            </div>
                         </div>
                     </div>
                 </div>

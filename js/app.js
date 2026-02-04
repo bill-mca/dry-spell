@@ -18,6 +18,20 @@ import {
     formatTankSize,
     formatDays
 } from './utils.js';
+import {
+    createTankLevelChart,
+    generateTankLevelInsights
+} from './visualizations/tank-level-chart.js';
+import {
+    createMonthlyRainfallChart,
+    analyzeRainfallPatterns,
+    generateMonthlyRainfallInsights
+} from './visualizations/monthly-rainfall-chart.js';
+import {
+    createDrySpellChart,
+    analyzeDrySpells,
+    generateDrySpellStats
+} from './visualizations/dry-spell-chart.js';
 
 /**
  * Application State
@@ -40,6 +54,16 @@ const state = {
  * DOM Elements
  */
 let elements = {};
+
+/**
+ * Chart instances (to destroy before recreating)
+ */
+let chartInstances = {
+    securityTankLevel: null,
+    securityDrySpell: null,
+    opportunisticTankLevel: null,
+    opportunisticRainfall: null
+};
 
 /**
  * Initialize the application
@@ -154,6 +178,14 @@ function bindEvents() {
     // Usage presets
     elements.presetBtns.forEach(btn => {
         btn.addEventListener('click', () => selectUsagePreset(btn));
+    });
+
+    // Chart toggles
+    document.querySelectorAll('.chart-header').forEach(header => {
+        header.addEventListener('click', () => {
+            const chartName = header.dataset.chart;
+            toggleChart(chartName);
+        });
     });
 }
 
@@ -462,9 +494,162 @@ function runOpportunisticAnalysis() {
 }
 
 /**
+ * Create charts for security mode results
+ */
+function createSecurityCharts() {
+    // Destroy existing charts
+    if (chartInstances.securityTankLevel) {
+        chartInstances.securityTankLevel.destroy();
+        chartInstances.securityTankLevel = null;
+    }
+    if (chartInstances.securityDrySpell) {
+        chartInstances.securityDrySpell.destroy();
+        chartInstances.securityDrySpell = null;
+    }
+
+    // Tank level chart
+    const tankLevelCanvas = document.getElementById('security-tank-level-chart');
+    if (tankLevelCanvas && state.results && state.results.simulation) {
+        chartInstances.securityTankLevel = createTankLevelChart(
+            tankLevelCanvas,
+            state.results.simulation,
+            state.results.recommendedTankSize_L
+        );
+
+        // Add insights
+        const insightsEl = document.getElementById('security-tank-insights');
+        if (insightsEl) {
+            insightsEl.innerHTML = '<h5>Summary</h5>' + generateTankLevelInsights(
+                state.results.simulation,
+                state.results.recommendedTankSize_L
+            );
+        }
+    }
+
+    // Dry spell chart
+    const drySpellCanvas = document.getElementById('security-dry-spell-chart');
+    if (drySpellCanvas && state.rainfallData) {
+        chartInstances.securityDrySpell = createDrySpellChart(
+            drySpellCanvas,
+            state.rainfallData,
+            1.0  // 1mm threshold
+        );
+
+        // Add statistics
+        const statsEl = document.getElementById('security-dry-spell-stats');
+        if (statsEl) {
+            const analysis = analyzeDrySpells(state.rainfallData, 1.0);
+            statsEl.innerHTML = generateDrySpellStats(analysis);
+        }
+    }
+}
+
+/**
+ * Create charts for opportunistic mode results
+ */
+function createOpportunisticCharts() {
+    // Destroy existing charts
+    if (chartInstances.opportunisticTankLevel) {
+        chartInstances.opportunisticTankLevel.destroy();
+        chartInstances.opportunisticTankLevel = null;
+    }
+    if (chartInstances.opportunisticRainfall) {
+        chartInstances.opportunisticRainfall.destroy();
+        chartInstances.opportunisticRainfall = null;
+    }
+
+    if (!state.results) return;
+
+    // Get the best value tank size
+    const bestValue = state.results.comparisons[state.results.bestValueIndex];
+    const bestValueSimulation = state.results.simulations.get(bestValue.tankSize_L);
+
+    // Tank level chart
+    const tankLevelCanvas = document.getElementById('opportunistic-tank-level-chart');
+    if (tankLevelCanvas && bestValueSimulation) {
+        chartInstances.opportunisticTankLevel = createTankLevelChart(
+            tankLevelCanvas,
+            bestValueSimulation,
+            bestValue.tankSize_L
+        );
+
+        // Add insights
+        const insightsEl = document.getElementById('opportunistic-tank-insights');
+        if (insightsEl) {
+            insightsEl.innerHTML = '<h5>Summary</h5>' + generateTankLevelInsights(
+                bestValueSimulation,
+                bestValue.tankSize_L
+            );
+        }
+    }
+
+    // Monthly rainfall chart
+    const rainfallCanvas = document.getElementById('opportunistic-rainfall-chart');
+    if (rainfallCanvas && state.rainfallData) {
+        chartInstances.opportunisticRainfall = createMonthlyRainfallChart(
+            rainfallCanvas,
+            state.rainfallData
+        );
+
+        // Add insights
+        const insightsEl = document.getElementById('opportunistic-rainfall-insights');
+        if (insightsEl) {
+            const patterns = analyzeRainfallPatterns(state.rainfallData);
+            insightsEl.innerHTML = generateMonthlyRainfallInsights(patterns);
+        }
+    }
+}
+
+/**
+ * Toggle chart section expand/collapse
+ */
+function toggleChart(chartName) {
+    const section = document.querySelector(`[data-chart="${chartName}"]`).closest('.chart-section');
+    const content = section.querySelector('.chart-content');
+    const toggle = section.querySelector('.chart-toggle');
+
+    const isCollapsed = content.classList.contains('collapsed');
+
+    if (isCollapsed) {
+        content.classList.remove('collapsed');
+        toggle.classList.add('expanded');
+
+        // Lazy-create chart if not already created
+        if (chartName === 'security-tank-level' && !chartInstances.securityTankLevel) {
+            createSecurityCharts();
+        } else if (chartName === 'security-dry-spell' && !chartInstances.securityDrySpell) {
+            createSecurityCharts();
+        } else if (chartName === 'opportunistic-tank-level' && !chartInstances.opportunisticTankLevel) {
+            createOpportunisticCharts();
+        } else if (chartName === 'opportunistic-rainfall' && !chartInstances.opportunisticRainfall) {
+            createOpportunisticCharts();
+        }
+    } else {
+        content.classList.add('collapsed');
+        toggle.classList.remove('expanded');
+    }
+}
+
+/**
  * Reset app to initial state
  */
 function resetApp() {
+    // Destroy all charts
+    Object.keys(chartInstances).forEach(key => {
+        if (chartInstances[key]) {
+            chartInstances[key].destroy();
+            chartInstances[key] = null;
+        }
+    });
+
+    // Collapse all chart sections
+    document.querySelectorAll('.chart-content').forEach(content => {
+        content.classList.add('collapsed');
+    });
+    document.querySelectorAll('.chart-toggle').forEach(toggle => {
+        toggle.classList.remove('expanded');
+    });
+
     state.currentStep = 'upload';
     state.rainfallData = null;
     state.parseResult = null;
