@@ -227,43 +227,49 @@
 
                         <!-- Tank Level Chart -->
                         <div class="chart-section" id="security-tank-level-section">
-                            <div class="chart-header" data-chart="security-tank-level">
+                            <div class="chart-header" data-chart="security-tank-level" role="button" tabindex="0" aria-expanded="false" aria-controls="security-tank-level-content">
                                 <h4>
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                                         <line x1="12" y1="20" x2="12" y2="10"></line>
                                         <line x1="18" y1="20" x2="18" y2="4"></line>
                                         <line x1="6" y1="20" x2="6" y2="16"></line>
                                     </svg>
                                     Tank Level Over Time
                                 </h4>
-                                <span class="chart-toggle">▼</span>
+                                <span class="chart-toggle" aria-hidden="true">▼</span>
                             </div>
-                            <div class="chart-content collapsed">
+                            <div class="chart-content collapsed" id="security-tank-level-content" role="region" aria-label="Tank level over time chart">
                                 <p class="chart-description">See how your tank level would have fluctuated over the historical period.</p>
                                 <div class="chart-container tank-level-chart">
-                                    <canvas id="security-tank-level-chart"></canvas>
+                                    <canvas id="security-tank-level-chart" role="img" aria-label="Line chart showing tank water level over time"></canvas>
                                 </div>
                                 <div class="chart-insights" id="security-tank-insights"></div>
+                                <div class="chart-export">
+                                    <button class="btn-export" data-chart="security-tank-level-chart" aria-label="Download tank level chart as PNG">Download Chart</button>
+                                </div>
                             </div>
                         </div>
 
                         <!-- Dry Spell Histogram -->
                         <div class="chart-section" id="security-dry-spell-section">
-                            <div class="chart-header" data-chart="security-dry-spell">
+                            <div class="chart-header" data-chart="security-dry-spell" role="button" tabindex="0" aria-expanded="false" aria-controls="security-dry-spell-content">
                                 <h4>
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                                         <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
                                     </svg>
                                     Dry Spell Analysis
                                 </h4>
-                                <span class="chart-toggle">▼</span>
+                                <span class="chart-toggle" aria-hidden="true">▼</span>
                             </div>
-                            <div class="chart-content collapsed">
+                            <div class="chart-content collapsed" id="security-dry-spell-content" role="region" aria-label="Dry spell analysis chart">
                                 <p class="chart-description">Distribution of consecutive dry periods in your rainfall data.</p>
                                 <div class="chart-container dry-spell-chart">
-                                    <canvas id="security-dry-spell-chart"></canvas>
+                                    <canvas id="security-dry-spell-chart" role="img" aria-label="Histogram showing distribution of dry spell durations"></canvas>
                                 </div>
                                 <div id="security-dry-spell-stats"></div>
+                                <div class="chart-export">
+                                    <button class="btn-export" data-chart="security-dry-spell-chart" aria-label="Download dry spell chart as PNG">Download Chart</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -308,31 +314,34 @@
 
                         <!-- Tank Level Chart -->
                         <div class="chart-section" id="opportunistic-tank-level-section">
-                            <div class="chart-header" data-chart="opportunistic-tank-level">
+                            <div class="chart-header" data-chart="opportunistic-tank-level" role="button" tabindex="0" aria-expanded="false" aria-controls="opportunistic-tank-level-content">
                                 <h4>
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                                         <line x1="12" y1="20" x2="12" y2="10"></line>
                                         <line x1="18" y1="20" x2="18" y2="4"></line>
                                         <line x1="6" y1="20" x2="6" y2="16"></line>
                                     </svg>
                                     Tank Level Over Time
                                 </h4>
-                                <span class="chart-toggle">▼</span>
+                                <span class="chart-toggle" aria-hidden="true">▼</span>
                             </div>
-                            <div class="chart-content collapsed">
+                            <div class="chart-content collapsed" id="opportunistic-tank-level-content" role="region" aria-label="Tank level over time chart">
                                 <p class="chart-description">See how the recommended tank level would have fluctuated over the historical period.</p>
                                 <div class="chart-container tank-level-chart">
-                                    <canvas id="opportunistic-tank-level-chart"></canvas>
+                                    <canvas id="opportunistic-tank-level-chart" role="img" aria-label="Line chart showing tank water level over time"></canvas>
                                 </div>
                                 <div class="chart-insights" id="opportunistic-tank-insights"></div>
+                                <div class="chart-export">
+                                    <button class="btn-export" data-chart="opportunistic-tank-level-chart" aria-label="Download tank level chart as PNG">Download Chart</button>
+                                </div>
                             </div>
                         </div>
 
                         <!-- Monthly Rainfall Pattern -->
                         <div class="chart-section" id="opportunistic-rainfall-section">
-                            <div class="chart-header" data-chart="opportunistic-rainfall">
+                            <div class="chart-header" data-chart="opportunistic-rainfall" role="button" tabindex="0" aria-expanded="false" aria-controls="opportunistic-rainfall-content">
                                 <h4>
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                                         <line x1="8" y1="19" x2="8" y2="21"></line>
                                         <line x1="8" y1="13" x2="8" y2="15"></line>
                                         <line x1="16" y1="19" x2="16" y2="21"></line>
@@ -343,14 +352,17 @@
                                     </svg>
                                     Monthly Rainfall Patterns
                                 </h4>
-                                <span class="chart-toggle">▼</span>
+                                <span class="chart-toggle" aria-hidden="true">▼</span>
                             </div>
-                            <div class="chart-content collapsed">
+                            <div class="chart-content collapsed" id="opportunistic-rainfall-content" role="region" aria-label="Monthly rainfall patterns chart">
                                 <p class="chart-description">Understand the seasonal rainfall patterns at your location.</p>
                                 <div class="chart-container monthly-rainfall-chart">
-                                    <canvas id="opportunistic-rainfall-chart"></canvas>
+                                    <canvas id="opportunistic-rainfall-chart" role="img" aria-label="Bar chart showing average monthly rainfall"></canvas>
                                 </div>
                                 <div class="chart-insights" id="opportunistic-rainfall-insights"></div>
+                                <div class="chart-export">
+                                    <button class="btn-export" data-chart="opportunistic-rainfall-chart" aria-label="Download rainfall chart as PNG">Download Chart</button>
+                                </div>
                             </div>
                         </div>
                     </div>

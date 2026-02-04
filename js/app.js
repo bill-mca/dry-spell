@@ -180,11 +180,30 @@ function bindEvents() {
         btn.addEventListener('click', () => selectUsagePreset(btn));
     });
 
-    // Chart toggles
+    // Chart toggles - click
     document.querySelectorAll('.chart-header').forEach(header => {
         header.addEventListener('click', () => {
             const chartName = header.dataset.chart;
             toggleChart(chartName);
+        });
+    });
+
+    // Chart toggles - keyboard (Enter and Space)
+    document.querySelectorAll('.chart-header').forEach(header => {
+        header.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                const chartName = header.dataset.chart;
+                toggleChart(chartName);
+            }
+        });
+    });
+
+    // Chart export buttons
+    document.querySelectorAll('.btn-export').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const canvasId = btn.dataset.chart;
+            exportChart(canvasId);
         });
     });
 }
@@ -604,7 +623,8 @@ function createOpportunisticCharts() {
  * Toggle chart section expand/collapse
  */
 function toggleChart(chartName) {
-    const section = document.querySelector(`[data-chart="${chartName}"]`).closest('.chart-section');
+    const header = document.querySelector(`[data-chart="${chartName}"]`);
+    const section = header.closest('.chart-section');
     const content = section.querySelector('.chart-content');
     const toggle = section.querySelector('.chart-toggle');
 
@@ -613,6 +633,7 @@ function toggleChart(chartName) {
     if (isCollapsed) {
         content.classList.remove('collapsed');
         toggle.classList.add('expanded');
+        header.setAttribute('aria-expanded', 'true');
 
         // Lazy-create chart if not already created
         if (chartName === 'security-tank-level' && !chartInstances.securityTankLevel) {
@@ -627,6 +648,29 @@ function toggleChart(chartName) {
     } else {
         content.classList.add('collapsed');
         toggle.classList.remove('expanded');
+        header.setAttribute('aria-expanded', 'false');
+    }
+}
+
+/**
+ * Export chart as PNG image
+ */
+function exportChart(canvasId) {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) return;
+
+    try {
+        // Get image data URL
+        const url = canvas.toDataURL('image/png');
+
+        // Create download link
+        const link = document.createElement('a');
+        link.download = `${canvasId}-${new Date().toISOString().split('T')[0]}.png`;
+        link.href = url;
+        link.click();
+    } catch (error) {
+        console.error('Failed to export chart:', error);
+        alert('Failed to export chart. Please try again.');
     }
 }
 
