@@ -34,7 +34,8 @@ export function analyzeOpportunisticMode(rainfallData, params) {
     const totalDemand_L = dailyUsage_L * totalDays;
     const years = totalDays / 365.25;
 
-    // Analyze each tank size
+    // Analyze each tank size and store simulations
+    const simulations = new Map();
     const comparisons = tankSizesToCompare.map(tankSize_L => {
         const result = runWaterBalance({
             rainfallData,
@@ -42,6 +43,9 @@ export function analyzeOpportunisticMode(rainfallData, params) {
             roofArea_m2,
             dailyUsage_L
         });
+
+        // Store the full simulation for chart visualization
+        simulations.set(tankSize_L, result);
 
         // Calculate actual rainwater used (demand minus deficit)
         const totalDeficit_L = result.summary.totalDeficit_L;
@@ -92,6 +96,7 @@ export function analyzeOpportunisticMode(rainfallData, params) {
 
     return {
         comparisons,
+        simulations,  // Add full simulations for chart visualization
         bestValueSize: bestValue.tankSize_L,
         bestValueIndex: comparisons.findIndex(c => c.tankSize_L === bestValue.tankSize_L),
         roofPotential: {
