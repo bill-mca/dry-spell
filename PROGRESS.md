@@ -134,6 +134,13 @@ All features should be tested with:
 - Export only works in modern browsers supporting Canvas API
 - Chart.js annotation plugin not used (would add reference lines at 25%, 50%, 75%)
 
+#### Bug Fixes
+
+**Issue**: Opportunistic mode charts not displaying
+- **Cause**: `analyzeOpportunisticMode()` wasn't returning full simulation results
+- **Fix**: Modified to store and return simulations Map with daily tank levels
+- **Commit**: `d15aae1`
+
 #### Next Steps
 
 Phase 6 is complete. All visualization features from the backlog have been implemented.
